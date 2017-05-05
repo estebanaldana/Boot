@@ -83,8 +83,16 @@ function evaluateMessage(recipientId, message){
 		finalMessage = "Hola Como Estas";
 	}
 
-		else if(isContain(message, 'daisame')){
+	else if(isContain(message, 'daisame')){
 		finalMessage = "Hola :)";
+	}
+
+	else if(is isContain(message, 'isabel')){
+		finalMessage = 'Hola que tal'
+	}
+
+	else if(is isContain(message, 'laura')){
+		finalMessage = 'que quieres mejor dicho para no hacer larga la conversacion dejame en paz'
 	}
 
 	else{
