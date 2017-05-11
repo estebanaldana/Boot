@@ -72,8 +72,7 @@ function evaluateMessage(recipientId, message){
 
 
 	else if(isContain(message, 'hola')){
-		finalMessage = "Hola";
-		finalMessage = "Quien Eres"
+		finalMessage = "Hola Quien Eres";
 		if(isContain(message, 'esteban')){
 			finalMessage = 'Hola que tal';
 		}
@@ -83,16 +82,38 @@ function evaluateMessage(recipientId, message){
 		finalMessage = "Hola Como Estas";
 	}
 
-	else if(isContain(message, 'daisame')){
+	else if(isContain(message, 'daysame')){
 		finalMessage = "Hola :)";
 	}
 
-	else if(is isContain(message, 'isabel')){
-		finalMessage = 'Hola que tal'
+	else if(isContain(message, 'isabel')){
+		finalMessage = 'Hola que tal';
 	}
 
-	else if(is isContain(message, 'laura')){
-		finalMessage = 'que quieres mejor dicho para no hacer larga la conversacion dejame en paz'
+	else if(isContain(message, 'laura')){
+		finalMessage = 'que quieres mejor dicho para no hacer larga la conversacion dejame en paz';
+	}
+
+	else if(isContain(message, 'mama')){
+		finalMessage='que quieres ya vas a empesar a moler';
+	}
+
+	else if(isContain(message,'imagen')){
+		finalMessage='imagen de que?';
+		if(isContain(message, 'gato')){
+			sendMessageImage(recipientId);
+		}
+	}
+
+	else if(isContain(message, 'clima')){
+		getWeather(function(temperature){
+			message = getMessageWeather(temperature);
+			sendMessageText(recipientId,message);
+		});
+	}
+
+	else if(isContain(message, 'info')){
+		 sendMessageTemplate(recipientId);
 	}
 
 	else{
@@ -117,6 +138,61 @@ function sendMessageText(recipientId, message) {
 	callSendAPI(messageData);
 }
 
+function sendMessageImage(recipientId){
+	var messageData = { 
+		recipient: {
+			id: recipientId
+		},
+		message: {
+			attachment: {
+				type: "image",
+				payload: {
+					url: "http://i.imgur.com/SOFXhd6.jpg"
+				}
+			}
+		}
+	};
+	callSendAPI(messageData);
+}
+
+//template
+function sendMessageTemplate(recipientId){
+	var messageData = {
+		recipient:{
+			id : recipientId
+		},
+		message:{
+			attachment:{
+				type: "template",
+				payload:{
+					template_type: "generic",
+					elements: [ elemenTemplate() ]
+				}
+			}
+		}
+	};
+	callSendAPI(messageData);
+}
+
+
+function elemenTemplate(){
+	return{
+		title :"Esteban",
+		subtitle: "prueba",
+		item_url: "https://www.facebook.com/PlayCodeCompany",
+		image_url: "http://vignette2.wikia.nocookie.net/especiesaliens/images/6/6b/006.jpg/revision/latest?cb=20111220014746&path-prefix=es",
+		buttons: [ buttonTemplate() ],
+	}
+}
+
+function buttonTemplate(){
+	return{
+		type: "web_url",
+		url: "https://www.youtube.com/channel/UCsVYL93M_Higkf4gRw0kALw",
+		title:"EA",
+	}
+}
+
 
 function callSendAPI(messageData){
 	request({
@@ -132,6 +208,27 @@ function callSendAPI(messageData){
 			console.log('El mensaje fue enviado');
 		}
 	});
+}
+
+//mensaje de la temperatura 
+function getMessageWeather(temperature){
+	if(temperature > 30){
+		return "hay demaciado calor la temperatura es de " +temperature +"º";
+	}
+	return "la temperatura es de" +temperature +"º es un buen dia";
+}
+
+//api clima
+function getWeather( callback ){
+	request('http://api.geonames.org/findNearByWeatherJSON?formatted=true&lat=42&lng=-2&username=demo&style=full',
+	function(error, response, data){
+		if(!error){
+			var response = JSON.parse(data);
+			var temperature = response.weatherObservation.temperature;
+			callback(temperature);
+		}
+	});
+
 }
 
 
