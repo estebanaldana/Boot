@@ -77,18 +77,6 @@ function evaluateMessage(recipientId, message){
 			finalMessage = "Hola Como Estas";
 		}
 
-		else if(isContain(message, 'daysame')){
-			finalMessage = "Hola :)";
-		}
-
-		else if(isContain(message, 'isabel')){
-			finalMessage = 'Hola que tal';
-		}
-
-		else if(isContain(message, 'laura')){
-			finalMessage = 'que quieres mejor dicho para no hacer larga la conversacion dejame en paz';
-		}	
-
 		else if(isContain(message, 'mama')){
 			finalMessage='que quieres ya vas a empesar a moler';
 		}
@@ -114,8 +102,8 @@ function evaluateMessage(recipientId, message){
 
 	else if(isContain(message, 'luke')){
 		if(isContain(message, 'star wars')){
-			getStarWars(function(datos){
-			message = "sus datos son: "+datos;
+			getStarWars(function(name, estatura){
+			message = name +estatura;
 			sendMessageText(recipientId,message);
 			});
 		}
@@ -249,7 +237,6 @@ function getStarWars( callback ){
 		if(!error){
 			var response = JSON.parse(data);
 			var personaje = response.name;
-			var sexo = response.gender;
 			callback(personaje);
 		}
 		if(!error){
@@ -263,7 +250,6 @@ function getStarWars( callback ){
 			callback(sexo);
 		}
 	});
-
 }
 
 
