@@ -51,12 +51,12 @@ app.post('/webhook', function(req, res){
 
 
 function receiveMessage(event){
-	//console.log(event);
+	console.log(event);
 	var senderID = event.sender.id;
 	var messageText = event.message.text;
 
-	//console.log(senderID);
-	//console.log(messageText);
+	console.log(senderID);
+	console.log(messageText);
 
 	evaluateMessage(senderID, messageText);
 }
@@ -71,10 +71,10 @@ function evaluateMessage(recipientId, message){
 	}
 
 
-	else if(isContain(message, 'hola')){
+	else if(isContain(message, 'hola') || isContain(message, 'Hola')){
 
 		if(isContain(message, 'janette')){
-			finalMessage = "Hola Como Estas";
+			finalMessage = "Hola te kelo :)";
 		}
 
 		else if(isContain(message, 'mama')){
