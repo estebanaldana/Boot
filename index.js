@@ -6,6 +6,10 @@ const APP_TOKEN = 'EAAQhJ6EboPkBAD7A0BgAXLZBmZCtg9xmNUZAwdgZCwQtb61N9IU79OZCjgxy
 
 var app = express();
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'));
+
+app.set('views', __dirname + 'views');
+app.set('view engine', 'ejs')
 
 app.set('port', (process.env.PORT || 5000));
 
