@@ -33,25 +33,46 @@ app.get('/webhook', function(req, res){
 
 
 app.post('/webhook', function(req, res){
-	var data = req.body;
-	//console.log(data);
-	if(data.object == 'page'){
+	// var data = req.body;
+	// //console.log(data);
+	// if(data.object == 'page'){
 
-		data.entry.forEach(function(pageEntry){
-			pageEntry.messaging.forEach(function(messagingEvent){
+	// 	data.entry.forEach(function(pageEntry){
+	// 		pageEntry.messaging.forEach(function(messagingEvent){
 
-				console.log("Entro");
+	// 			console.log("Entro");
 
-				if(messagingEvent.message){
-					receiveMessage(messagingEvent);
-				}
+	// 			if(messagingEvent.message){
+	// 				receiveMessage(messagingEvent);
+	// 			}
 
-			});
-		});
+	// 		});
+	// 	});
 
-		res.sendStatus(200);
+	// 	res.sendStatus(200);
 
+	// }
+
+	let messaging_events = req.body.entry[0].messaging
+	for (let i = 0; i < messaging_events.length; i++) {
+		let event = req.body.entry[0].messaging[i]
+		let sender = event.sender.id
+		if (event.message && event.message.text) {
+			let text = event.message.text
+			if (text === 'Generic'){ 
+				console.log("welcome to chatbot");
+				//sendGenericMessage(sender)
+				continue
+			}
+			sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
+		}
+		if (event.postback) {
+			let text = JSON.stringify(event.postback);
+			sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token);
+			continue
+		}
 	}
+	res.sendStatus(200);
 });
 
 
