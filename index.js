@@ -8,7 +8,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
-app.set('views', __dirname + 'views');
+app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.set('port', (process.env.PORT || 5000));
@@ -18,7 +18,7 @@ app.listen(app.get('port'), function(){
 });
 
 app.get('/', function(req, res){
-	res.render('Bienvenido')
+	res.send('Bienvenido');
 });
 
 
