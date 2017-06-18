@@ -5,6 +5,8 @@ var request = require('request');
 const APP_TOKEN = 'EAAQhJ6EboPkBAD7A0BgAXLZBmZCtg9xmNUZAwdgZCwQtb61N9IU79OZCjgxyvKAFJLB9XPHnNXqr6j94X7yoGbmnrhhTZBgDkO795gNisvwJSgJ0WaMB0aMSn5I3WZCXlQEApaCsICLpxwVEJhmqAtPo8WhT34kmLKOvWH5X5QpeAZDZD';
 
 var app = express();
+
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 
