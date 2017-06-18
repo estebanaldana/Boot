@@ -58,15 +58,15 @@ app.post('/webhook', function(req, res){
       let sender = event.sender.id
       if (event.message && event.message.text) {
         let text = event.message.text
-        if (text === 'Generic') {
-            sendGenericMessage(sender)
-            continue
-        }
-        receiveMessage(sender, "Message received: " + text.substring(0, 200))
+        // if (text === 'Generic') {
+        //     sendGenericMessage(sender)
+        //     continue
+        // }
+        sendMessageText(sender, "Message received: " + text.substring(0, 200))
       }
       if (event.postback) {
         let text = JSON.stringify(event.postback)
-        receiveMessage(sender, "Postback: "+text.substring(0, 200), token)
+        sendMessageText(sender, "Postback: "+text.substring(0, 200), APP_TOKEN)
         continue
       }
     }
