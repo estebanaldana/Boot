@@ -2,7 +2,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 
-const APP_TOKEN = 'EAAQhJ6EboPkBAD7A0BgAXLZBmZCtg9xmNUZAwdgZCwQtb61N9IU79OZCjgxyvKAFJLB9XPHnNXqr6j94X7yoGbmnrhhTZBgDkO795gNisvwJSgJ0WaMB0aMSn5I3WZCXlQEApaCsICLpxwVEJhmqAtPo8WhT34kmLKOvWH5X5QpeAZDZD';
+//const APP_TOKEN = 'EAAQhJ6EboPkBAD7A0BgAXLZBmZCtg9xmNUZAwdgZCwQtb61N9IU79OZCjgxyvKAFJLB9XPHnNXqr6j94X7yoGbmnrhhTZBgDkO795gNisvwJSgJ0WaMB0aMSn5I3WZCXlQEApaCsICLpxwVEJhmqAtPo8WhT34kmLKOvWH5X5QpeAZDZD';
+const mytoken = process.env.FB_VERIFY_TOKEN
+const accesstoken = process.env.FB_ACCESS_TOKEN
 
 var app = express();
 
@@ -23,7 +25,7 @@ app.get('/', function(req, res){
 
 app.get('/webhook', function(req, res){
 	 
-	if(req.query['hub.verify_token'] === 'estebanah123456789'){
+	if(req.query['hub.verify_token'] === mytoken){
 		res.send(req.query['hub.challenge']);
 	}
 	else{
@@ -206,7 +208,7 @@ function buttonTemplate(){
 function callSendAPI(messageData){
 	request({
 		uri: 'https://graph.facebook.com/v2.6/me/messages',
-		qs : { access_token : APP_TOKEN },
+		qs : { access_token : accesstoken },
 		method: 'POST',
 		json: messageData
 	},function(error, response, data){
