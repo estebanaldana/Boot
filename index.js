@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.set('port', (progress.env.PORT || 5000));
 
 app.listen(app.get('port'), function(){
-	console.log("el servidor se encuentra en el puerto" app.get('port'));
+	console.log("el servidor se encuentra en el puerto", app.get('port'));
 });
 
 app.get('/', function(req, res){
