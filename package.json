@@ -1,0 +1,29 @@
+{
+  "name": "primer_boot",
+  "version": "1.0.0",
+  "description": "boot :)",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "request": "^2.81.0"
+  },
+  "engines":{
+    "node": "^6.10.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/estebanaldana/Boot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/estebanaldana/Boot/issues"
+  },
+  "homepage": "https://github.com/estebanaldana/Boot#readme"
+}
