@@ -43,6 +43,10 @@ app.post('/webhook', function(req, res){
 	if(data.object == 'page'){
 
 		data.entry.forEach(function(pageEntry){
+
+			var pageID = pageEntry.id;
+			var timeOfEvent = pageEntry.time;
+
 			pageEntry.messaging.forEach(function(messagingEvent){
 
 				console.log("Entro");
@@ -62,44 +66,23 @@ app.post('/webhook', function(req, res){
 });
 
 
-// function verifyRequestSignature(req, res, buf){
-// 	var signature = req.headers["x-hub-signature"];
-
-// 	if(!signature){
-// 		console.error("couldn's validate the signature");
-// 	}else{
-// 		var elements = signature.split('=');
-// 		var method = elements[0];
-// 		var signatureHash = elements[1];
-
-// 		var expectedHash = crypto.createHmac('sha1', mytoken)
-// 			.update(buf)
-// 			.digest('hex');
-
-// 		if(signatureHash != expectedHash) {
-// 			throw new Error("couldn't validate the signature");
-// 		}
-// 	}
-// }
-
 function receiveMessage(event){
-	console.log(event);
+	console.log("evento %d", event);
 	var senderID = event.sender.id;
 	var message = event.message;
 	var recipientId = event.recipient.id;
 
-	console.log(senderID);
-	console.log(recipientId);
+	console.log("senderID: %d", senderID);
+	console.log("recipientId: %d", recipientId);
 	console.log(JSON.stringify(message));
 
 	var messageId = message.mid;
 
 	var messageText = message.text;
 	var messageAttachments = message.attachments;
-
-	console.log(messageText);
-
-	evaluateMessage(senderID, messageText);
+	if(messageText){
+		evaluateMessage(senderID, messageText);
+	}
 }
 
 function evaluateMessage(recipientId, message){
@@ -293,15 +276,15 @@ function callSendAPI(messageData){
 		method: 'POST',
 		json: messageData
 	},function(error, response, data){
-		if(error && response.statusCode == 200){
-			var recipientID = data.recipient_id;
-			var messageID = data.message_id;
+		if(!error && response.statusCode == 200){
+			var recipientId = data.recipient_id;
+			var messageId = data.message_id;
 			console.log('No es posible enviar el mensaje el mesaje %s y con el recipiente %s', messageID, recipientID);
 		}
 		else{
 			console.log('El mensaje fue enviado');
-			console.error(messageID);
-			console.error(recipientID);
+			console.error(messageId);
+			console.error(recipientId);
 		}
 	});
 }
