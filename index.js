@@ -7,16 +7,18 @@ const mytoken = process.env.FB_VERIFY_TOKEN
 const accesstoken = process.env.FB_ACCESS_TOKEN
 
 var app = express();
-
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-
-
 app.set('port', (process.env.PORT || 5000));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json({verify:verfyRequestSignature}));
+
+
+
 
 app.listen(app.get('port'), function(){
 	console.log("el servidor se encuentra en el puerto", app.get('port'));
 });
+
+module.exports = app;
 
 app.get('/', function(req, res){
 	res.send('Bienvenido');
@@ -81,17 +83,7 @@ function receiveMessage(event){
 	console.log(messageText);
 
 	if(messageText){
-
-		switch(messageText){
-
-			case 'generic':
-				genericMessage(senderID);
-				break;
-			default:
-				evaluateMessage(senderID, messageText);
-		}
-	}else if (messageAttachments){
-		evaluateMessage(senderID, "attachment received");
+		evaluateMessage(senderID, messageText);
 	}
 }
 
@@ -163,6 +155,9 @@ function evaluateMessage(recipientId, message){
 		 sendMessageTemplate(recipientId);
 	}
 
+	else if(isContain(message, "generic")){
+		sendgenericMessage(recipientId);
+	}
 	else{
 		finalMessage = 'solo repetir: ' + message;
 	}
@@ -170,7 +165,7 @@ function evaluateMessage(recipientId, message){
 	sendMessageText(recipientId, finalMessage);
 }
 
-function genericMessage(recipientId){
+function sendgenericMessage(recipientId){
 	var messageData = {
 		recipient: {
 			id: recipientId
