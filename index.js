@@ -39,8 +39,8 @@ app.get('/webhook', function(req, res){
 
 app.post('/webhook', function(req, res){
 	var data = req.body;
-
-	if(data.object == 'Esteban'){
+	
+	if(data.object == 'page'){
 
 		data.entry.forEach(function(pageEntry){
 			pageEntry.messaging.forEach(function(messagingEvent){
