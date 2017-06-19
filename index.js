@@ -1,8 +1,8 @@
 'use strict';
 
 const
-	express = require('express');
-	bodyParser = require('body-parser');
+	express = require('express'),
+	bodyParser = require('body-parser'),
 	request = require('request');
 
 const mytoken = process.env.FB_VERIFY_TOKEN
