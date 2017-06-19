@@ -79,7 +79,7 @@ function receiveMessage(event){
 	var messageText = message.text;
 	var messageAttachments = message.attachments;
 	if(messageText){
-		sendMessageText(senderID, messageText);
+		evaluateMessage(senderID, messageText);
 	}
 }
 
@@ -152,6 +152,21 @@ function evaluateMessage(recipientId, message){
 	}
 }
 
+function sendMessageText(recipientId, message) {
+
+	var messageData = {
+
+		recipient: {
+			id: recipientId
+		},
+		message: {
+			text: message
+		}
+
+	};
+	callSendAPI(messageData);
+}
+
 function sendgenericMessage(recipientId){
 	var messageData = {
 		recipient: {
@@ -194,22 +209,6 @@ function sendgenericMessage(recipientId){
 				}
 			}
 		}
-	};
-	callSendAPI(messageData);
-}
-
-
-function sendMessageText(recipientId, message) {
-
-	var messageData = {
-
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			text: message
-		}
-
 	};
 	callSendAPI(messageData);
 }
