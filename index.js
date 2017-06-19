@@ -166,7 +166,7 @@ function genericMessage(recipientId){
 		message: {
 			attachment: {
 				type: "template".
-				playload{
+				playload: {
 					template_type: "generic",
 					elements: [{
 						title: "rift",
