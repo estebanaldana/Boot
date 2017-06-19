@@ -5,14 +5,13 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var crypto =require('crypto');
 
-//const APP_TOKEN = 'EAAQhJ6EboPkBAF4Rcs8exvMdTtiWS9VqCk5jD3ygZCROfretwTnrS2cSWlVoNgAoBJhOZCofZB1aZAtVxtwLHnPOrhPK8qdnDmKxMVp6DslUiSTZBRoLslXI1v1FuHhEC8RZCscRCtKZBLK9IFOlLC5eBm0MVrucT9UIHok5JnqmgZDZD';
 const mytoken = process.env.FB_VERIFY_TOKEN
 const accesstoken = process.env.FB_ACCESS_TOKEN
 
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 app.set('view engine', 'ejs');
-app.use(bodyParser.json({ verify: verifyRequestSignature }));
+app.use(bodyParser.json();
 app.use(express.static('public'));
 
 
@@ -63,25 +62,25 @@ app.post('/webhook', function(req, res){
 });
 
 
-function verifyRequestSignature(req, res, buf){
-	var signature = req.headers["x-hub-signature"];
+// function verifyRequestSignature(req, res, buf){
+// 	var signature = req.headers["x-hub-signature"];
 
-	if(!signature){
-		console.error("couldn's validate the signature");
-	}else{
-		var elements = signature.split('=');
-		var method = elements[0];
-		var signatureHash = elements[1];
+// 	if(!signature){
+// 		console.error("couldn's validate the signature");
+// 	}else{
+// 		var elements = signature.split('=');
+// 		var method = elements[0];
+// 		var signatureHash = elements[1];
 
-		var expectedHash = crypto.createHmac('sha1', mytoken)
-			.update(buf)
-			.digest('hex');
+// 		var expectedHash = crypto.createHmac('sha1', mytoken)
+// 			.update(buf)
+// 			.digest('hex');
 
-		if(signatureHash != expectedHash) {
-			throw new Error("couldn't validate the signature");
-		}
-	}
-}
+// 		if(signatureHash != expectedHash) {
+// 			throw new Error("couldn't validate the signature");
+// 		}
+// 	}
+// }
 
 function receiveMessage(event){
 	console.log(event);
