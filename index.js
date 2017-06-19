@@ -25,7 +25,7 @@ app.get('/', function(req, res){
 
 app.get('/webhook', function(req, res){
 	 
-	if(req.query['hub.verify_token'] === mytoken){
+	if(req.query['hub.mode'] === 'subscribe' &&	req.query['hub.verify_token'] === mytoken){
 		res.send(req.query['hub.challenge']);
 	}
 	else{
@@ -46,6 +46,8 @@ app.post('/webhook', function(req, res){
 
 				if(messagingEvent.message){
 					receiveMessage(messagingEvent);
+				}else if(messagingEvent.postback){
+					receivedPostback(messagingEvent);
 				}
 
 			});
@@ -74,7 +76,7 @@ function receiveMessage(event){
 	var messageId = message.mid;
 
 	var messageText = message.text;
-	var messageAttachments = message.attachment;
+	var messageAttachments = message.attachments;
 
 	console.log(messageText);
 
@@ -93,7 +95,17 @@ function receiveMessage(event){
 	}
 }
 
+function receivedPostback(event){
+	var senderID = event.sender.id;
+	var recipientID = event.recipien.id;
+	var timeOfPostback = event.timestamp;
 
+	var payload = event.postback.payload;
+
+	console.log("senderID %d recipientID %d timeOfPostback %d payload %d", senderID, recipientID, timeOfPostback, payload);
+
+	evaluateMessage(senderID, "postback called");
+}
 
 
 function evaluateMessage(recipientId, message){
