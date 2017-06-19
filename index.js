@@ -39,7 +39,7 @@ app.get('/webhook', function(req, res){
 
 app.post('/webhook', function(req, res){
 	var data = req.body;
-	console.log("data: %d", data);
+	console.log(data);
 	if(data.object == 'page'){
 
 		data.entry.forEach(function(pageEntry){
@@ -65,7 +65,7 @@ app.post('/webhook', function(req, res){
 
 
 function receiveMessage(event){
-	console.log("event: %d", event);
+	console.log(event);
 	var senderID = event.sender.id;
 	var message = event.message;
 	var recipientId = event.recipient.id;
@@ -79,7 +79,7 @@ function receiveMessage(event){
 	var messageText = message.text;
 	var messageAttachments = message.attachments;
 	if(messageText){
-		evaluateMessage(senderID, messageText);
+		sendMessageText(senderID, messageText);
 	}
 }
 
