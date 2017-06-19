@@ -82,9 +82,7 @@ function receiveMessage(event){
 
 	console.log(messageText);
 
-	if(messageText){
-		evaluateMessage(senderID, messageText);
-	}
+	evaluateMessage(senderID, messageText);
 }
 
 function receivedPostback(event){
