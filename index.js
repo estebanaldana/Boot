@@ -90,6 +90,8 @@ function evaluateMessage(recipientId, message){
 
 	if(isContain(message, 'ayuda')){
 		finalMessage = 'por el momento no te puedo ayudar';
+		message = finalMessage;
+		sendMessageText(recipientId, message);
 	}
 
 
