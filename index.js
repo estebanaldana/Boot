@@ -11,7 +11,7 @@ const accesstoken = process.env.FB_ACCESS_TOKEN
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 app.set('view engine', 'ejs');
-app.use(bodyParser.json())h;
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
 
@@ -39,7 +39,7 @@ app.get('/webhook', function(req, res){
 
 app.post('/webhook', function(req, res){
 	var data = req.body;
-	
+
 	if(data.object == 'page'){
 
 		data.entry.forEach(function(pageEntry){
