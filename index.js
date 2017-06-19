@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
+var crypto =require('crypto');
 
 //const APP_TOKEN = 'EAAQhJ6EboPkBAF4Rcs8exvMdTtiWS9VqCk5jD3ygZCROfretwTnrS2cSWlVoNgAoBJhOZCofZB1aZAtVxtwLHnPOrhPK8qdnDmKxMVp6DslUiSTZBRoLslXI1v1FuHhEC8RZCscRCtKZBLK9IFOlLC5eBm0MVrucT9UIHok5JnqmgZDZD';
 const mytoken = process.env.FB_VERIFY_TOKEN
