@@ -1,9 +1,9 @@
 'use strict';
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var request = require('request');
-var crypto =require('crypto');
+const
+	express = require('express');
+	bodyParser = require('body-parser');
+	request = require('request');
 
 const mytoken = process.env.FB_VERIFY_TOKEN
 const accesstoken = process.env.FB_ACCESS_TOKEN
@@ -28,7 +28,9 @@ app.get('/', function(req, res){
 
 app.get('/webhook', function(req, res){
 	 
-	if(req.query['hub.mode'] === 'subscribe' &&	req.query['hub.verify_token'] === mytoken){
+	if(req.query['hub.mode'] === 'subscribe' &&	
+		req.query['hub.verify_token'] === mytoken){
+
 		res.status(200).send(req.query['hub.challenge']);
 	}
 	else{
@@ -40,6 +42,7 @@ app.get('/webhook', function(req, res){
 app.post('/webhook', function(req, res){
 	var data = req.body;
 	console.log(data);
+
 	if(data.object == 'page'){
 
 		data.entry.forEach(function(pageEntry){
@@ -50,9 +53,10 @@ app.post('/webhook', function(req, res){
 			pageEntry.messaging.forEach(function(messagingEvent){
 
 				console.log("Entro");
-
 				if(messagingEvent.message){
 					receiveMessage(messagingEvent);
+				}else{
+					console.log("messagingEvent: ", messagingEvent);
 				}
 
 			});
@@ -63,6 +67,20 @@ app.post('/webhook', function(req, res){
 	}
 });
 
+app.get('/authorize', function(req, res){
+	var accountLinkingToken = req.query.account_linking_token;
+	var redirectURI = req.query.redirect_uri;
+
+	var authCode = "1234567890";
+
+	var redirectURISuccess = redirectURI + "&authorization_code=" + authCode;
+
+	res.render('authorize', {
+		accountLinkingToken: accountLinkingToken,
+		redirectURI: redirectURI,
+		redirectURISuccess: redirectURISuccess
+	});
+});
 
 function receiveMessage(event){
 	console.log(event);
@@ -79,7 +97,7 @@ function receiveMessage(event){
 	var messageText = message.text;
 	var messageAttachments = message.attachments;
 	
-	receiveMessage(senderID, messageText);
+	evaluateMessage(senderID, messageText);
 }
 
 function evaluateMessage(recipientId, message){
@@ -275,10 +293,15 @@ function callSendAPI(messageData){
 		if(!error && response.statusCode == 200){
 			var recipientId = data.recipient_id;
 			var messageId = data.message_id;
-			console.log('No es posible enviar el mensaje el mesaje %s y con el recipiente %s', messageID, recipientID);
+
+			if(messageId){
+				console.log('el mesaje %s y con el recipiente %s se a enviado', messageID, recipientID);
+			}else{
+				console.log('el mensaje API recipient %s', recipientId);
+			}
 		}
 		else{
-			console.log('El mensaje fue enviado');
+			console.log('error');
 			console.error(messageId);
 			console.error(recipientId);
 		}
