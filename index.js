@@ -37,7 +37,7 @@ app.get('/webhook', function(req, res){
 app.post('/webhook', function(req, res){
 	var data = req.body;
 	console.log(data);
-	if(data.object == 'page'){
+	if(data.object === 'page'){
 
 		data.entry.forEach(function(pageEntry){
 			pageEntry.messaging.forEach(function(messagingEvent){
@@ -64,13 +64,37 @@ app.post('/webhook', function(req, res){
 function receiveMessage(event){
 	console.log(event);
 	var senderID = event.sender.id;
-	var messageText = event.message.text;
+	var message = event.message;
+	var recipientId = event.rescipient.id;
 
 	console.log(senderID);
+	console.log(recipientId);
+	console.log(JSON.stringify(message));
+
+	var messageId = message.mid;
+
+	var messageText = message.text;
+	var messageAttachments = message.attachment;
+
 	console.log(messageText);
 
-	evaluateMessage(senderID, messageText);
+	if(messageText){
+
+		switch(messageText){
+
+			case 'generic':
+				genericMessage(senderID);
+				break;
+			default:
+				evaluateMessage(senderID, messageText);
+		}
+	}else if (messageAttachments){
+		evaluateMessage(senderID, "attachment received");
+	}
 }
+
+
+
 
 function evaluateMessage(recipientId, message){
 
@@ -134,6 +158,53 @@ function evaluateMessage(recipientId, message){
 	sendMessageText(recipientId, finalMessage);
 }
 
+function genericMessage(recipientId){
+	var messageData = {
+		recipient: {
+			id: recipientID
+		},
+		message: {
+			attachment: {
+				type: "template".
+				playload{
+					template_type: "generic",
+					elements: [{
+						title: "rift",
+						subtitle: "Next-generation virtual reality",
+						item_url: "https://www.oculus.com/en-us/rifft",
+						image_url: "https://messengerdemo.parseapp.com/imgrift.png",
+						buttons: [{
+							type: "web_url",
+							url: "http://www.oculus.com/en-us/rift/",
+							title: "open web url"
+						}, {
+							type: "postback",
+							title:"call postback",
+							payload: "payload for first bubble",
+						}],
+					}, {
+						title: "touch",
+						subtitle: "your hands, noe in vr",
+						item_url: "https://www.oculus.com/en-us/touch/",
+						image_url: "https//messengerdemo.parseapp.com/img/touch.png",
+						buttons: [{
+							type: "web_url",
+							url: "https://www.oculus.com/en-us/touch/",
+							title: "open web url"
+						}, {
+							type: "postback"
+							title: "call postback",
+							payload: "payload for second bubble",
+						}]
+					}]
+				}
+			}
+		}
+	};
+	callSendAPI(messageData);
+}
+
+
 function sendMessageText(recipientId, message) {
 
 	var messageData = {
@@ -148,6 +219,7 @@ function sendMessageText(recipientId, message) {
 	};
 	callSendAPI(messageData);
 }
+
 
 function sendMessageImage(recipientId){
 	var messageData = { 
@@ -212,11 +284,15 @@ function callSendAPI(messageData){
 		method: 'POST',
 		json: messageData
 	},function(error, response, data){
-		if(error){
-			console.log('No es posible enviar el mensaje');
+		if(error && response.statusCode == 200){
+			var recipientID = data.recipient_id;
+			var messageID = data.message_id;
+			console.log('No es posible enviar el mensaje el mesaje %s y con el recipiente %s', messageID, recipientID);
 		}
 		else{
 			console.log('El mensaje fue enviado');
+			console.error(messageID);
+			console.error(recipientID);
 		}
 	});
 }
