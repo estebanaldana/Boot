@@ -78,9 +78,8 @@ function receiveMessage(event){
 
 	var messageText = message.text;
 	var messageAttachments = message.attachments;
-	if(messageText){
-		evaluateMessage(senderID, messageText);
-	}
+	
+	receiveMessage(senderID, messageText);
 }
 
 function evaluateMessage(recipientId, message){
@@ -90,8 +89,6 @@ function evaluateMessage(recipientId, message){
 
 	if(isContain(message, 'ayuda')){
 		finalMessage = 'por el momento no te puedo ayudar';
-		message = finalMessage;
-		sendMessageText(recipientId, message);
 	}
 
 
