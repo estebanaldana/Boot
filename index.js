@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
@@ -12,24 +14,6 @@ app.set('port', (process.env.PORT || 5000));
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
-
-function verifyRequestSignature(req, res, buf){
-	var signature = req.headers["x-hub-signature"];
-
-	if(!signature){
-		console.error("couldn's validate the signature");
-	}else{
-		var elements = signature.split('=');
-		var method = elements[0];
-		var signatureHash = elements[1];
-
-		var expectedHash = crypto.createHmac('sha1', accesstoken).update(buf).digest('hex');
-
-		if(signatureHash != expectedHash) {
-			throw new Error("couldn't validate the signature");
-		}
-	}
-}
 
 
 app.listen(app.get('port'), function(){
@@ -46,7 +30,7 @@ app.get('/', function(req, res){
 app.get('/webhook', function(req, res){
 	 
 	if(req.query['hub.mode'] === 'subscribe' &&	req.query['hub.verify_token'] === mytoken){
-		res.send(req.query['hub.challenge']);
+		res.status(200).send(req.query['hub.challenge']);
 	}
 	else{
 		res.send('Tu no tinenes que estar aqui');
@@ -79,7 +63,25 @@ app.post('/webhook', function(req, res){
 });
 
 
+function verifyRequestSignature(req, res, buf){
+	var signature = req.headers["x-hub-signature"];
 
+	if(!signature){
+		console.error("couldn's validate the signature");
+	}else{
+		var elements = signature.split('=');
+		var method = elements[0];
+		var signatureHash = elements[1];
+
+		var expectedHash = crypto.createHmac('sha1', mytoken)
+			.update(buf)
+			.digest('hex');
+
+		if(signatureHash != expectedHash) {
+			throw new Error("couldn't validate the signature");
+		}
+	}
+}
 
 function receiveMessage(event){
 	console.log(event);
