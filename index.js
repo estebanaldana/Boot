@@ -39,7 +39,7 @@ app.get('/webhook', function(req, res){
 
 app.post('/webhook', function(req, res){
 	var data = req.body;
-
+	console.log("data: %d", data);
 	if(data.object == 'page'){
 
 		data.entry.forEach(function(pageEntry){
@@ -61,13 +61,11 @@ app.post('/webhook', function(req, res){
 		res.sendStatus(200);
 
 	}
-	
-
 });
 
 
 function receiveMessage(event){
-	console.log("evento %d", event);
+	console.log("event: %d", event);
 	var senderID = event.sender.id;
 	var message = event.message;
 	var recipientId = event.recipient.id;
@@ -92,6 +90,7 @@ function evaluateMessage(recipientId, message){
 
 	if(isContain(message, 'ayuda')){
 		finalMessage = 'por el momento no te puedo ayudar';
+		sendMessageText(recipientId, finalMessage);
 	}
 
 
@@ -99,14 +98,17 @@ function evaluateMessage(recipientId, message){
 
 		if(isContain(message, 'janette')){
 			finalMessage = "Hola te kelo :)";
+			sendMessageText(recipientId, finalMessage);
 		}
 
 		else if(isContain(message, 'mama')){
 			finalMessage='que quieres ya vas a empesar a moler';
+			sendMessageText(recipientId, finalMessage);
 		}
 
 		else{
 			finalMessage = "Hola Quien Eres";
+			sendMessageText(recipientId, finalMessage);
 		}
 	}
 
@@ -128,11 +130,12 @@ function evaluateMessage(recipientId, message){
 		if(isContain(message, 'star wars')){
 			getStarWars(function(name, estatura){
 			message = name +estatura;
-			sendMessageText(recipientId,message);
+			sendMessageText(recipientId, message);
 			});
 		}
 		else{
 			finalMessage='de que luke hablas';
+			sendMessageText(recipientId, finalMessage);
 		}
 	}
 
@@ -145,9 +148,8 @@ function evaluateMessage(recipientId, message){
 	}
 	else{
 		finalMessage = 'solo repetir: ' + message;
+		sendMessageText(recipientId, finalMessage);
 	}
-
-	sendMessageText(recipientId, finalMessage);
 }
 
 function sendgenericMessage(recipientId){
