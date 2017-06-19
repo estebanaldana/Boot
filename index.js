@@ -8,8 +8,10 @@ const accesstoken = process.env.FB_ACCESS_TOKEN
 
 var app = express();
 app.set('port', (process.env.PORT || 5000));
+app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json({verify:verfyRequestSignature}));
+app.use(bodyParser.json({verify: verifyRequestSignature }));
+app.use(express.static('public'));
 
 
 
@@ -48,8 +50,6 @@ app.post('/webhook', function(req, res){
 
 				if(messagingEvent.message){
 					receiveMessage(messagingEvent);
-				}else if(messagingEvent.postback){
-					receivedPostback(messagingEvent);
 				}
 
 			});
@@ -153,7 +153,7 @@ function evaluateMessage(recipientId, message){
 		 sendMessageTemplate(recipientId);
 	}
 
-	else if(isContain(message, "generic")){
+	else if(isContain(message, 'generic')){
 		sendgenericMessage(recipientId);
 	}
 	else{
