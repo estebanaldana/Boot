@@ -9,7 +9,6 @@ const accesstoken = process.env.FB_ACCESS_TOKEN
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json({verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
@@ -41,7 +40,7 @@ app.get('/webhook', function(req, res){
 app.post('/webhook', function(req, res){
 	var data = req.body;
 	console.log(data);
-	if(data.object === 'page'){
+	if(data.object == 'page'){
 
 		data.entry.forEach(function(pageEntry){
 			pageEntry.messaging.forEach(function(messagingEvent){
@@ -84,19 +83,6 @@ function receiveMessage(event){
 
 	evaluateMessage(senderID, messageText);
 }
-
-function receivedPostback(event){
-	var senderID = event.sender.id;
-	var recipientID = event.recipien.id;
-	var timeOfPostback = event.timestamp;
-
-	var payload = event.postback.payload;
-
-	console.log("senderID %d recipientID %d timeOfPostback %d payload %d", senderID, recipientID, timeOfPostback, payload);
-
-	evaluateMessage(senderID, "postback called");
-}
-
 
 function evaluateMessage(recipientId, message){
 
