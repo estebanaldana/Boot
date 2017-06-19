@@ -161,11 +161,11 @@ function evaluateMessage(recipientId, message){
 function genericMessage(recipientId){
 	var messageData = {
 		recipient: {
-			id: recipientID
+			id: recipientId
 		},
 		message: {
 			attachment: {
-				type: "template".
+				type: "template",
 				payload: {
 					template_type: "generic",
 					elements: [{
@@ -176,7 +176,7 @@ function genericMessage(recipientId){
 						buttons: [{
 							type: "web_url",
 							url: "http://www.oculus.com/en-us/rift/",
-							title: "open web url"
+							title: "open web url",
 						}, {
 							type: "postback",
 							title:"call postback",
@@ -190,9 +190,9 @@ function genericMessage(recipientId){
 						buttons: [{
 							type: "web_url",
 							url: "https://www.oculus.com/en-us/touch/",
-							title: "open web url"
+							title: "open web url",
 						}, {
-							type: "postback"
+							type: "postback",
 							title: "call postback",
 							payload: "payload for second bubble",
 						}]
