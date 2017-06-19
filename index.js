@@ -90,7 +90,6 @@ function evaluateMessage(recipientId, message){
 
 	if(isContain(message, 'ayuda')){
 		finalMessage = 'por el momento no te puedo ayudar';
-		sendMessageText(recipientId, finalMessage);
 	}
 
 
@@ -98,17 +97,14 @@ function evaluateMessage(recipientId, message){
 
 		if(isContain(message, 'janette')){
 			finalMessage = "Hola te kelo :)";
-			sendMessageText(recipientId, finalMessage);
 		}
 
 		else if(isContain(message, 'mama')){
 			finalMessage='que quieres ya vas a empesar a moler';
-			sendMessageText(recipientId, finalMessage);
 		}
 
 		else{
 			finalMessage = "Hola Quien Eres";
-			sendMessageText(recipientId, finalMessage);
 		}
 	}
 
@@ -122,7 +118,7 @@ function evaluateMessage(recipientId, message){
 	else if(isContain(message, 'clima')){
 		getWeather(function(temperature){
 			message = getMessageWeather(temperature);
-			sendMessageText(recipientId,message);
+			sendMessageText(recipientId, message);
 		});
 	}
 
@@ -135,7 +131,6 @@ function evaluateMessage(recipientId, message){
 		}
 		else{
 			finalMessage='de que luke hablas';
-			sendMessageText(recipientId, finalMessage);
 		}
 	}
 
@@ -148,8 +143,9 @@ function evaluateMessage(recipientId, message){
 	}
 	else{
 		finalMessage = 'solo repetir: ' + message;
-		sendMessageText(recipientId, finalMessage);
 	}
+
+	sendMessageText(recipientId, finalMessage);
 }
 
 function sendMessageText(recipientId, message) {
