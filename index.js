@@ -11,7 +11,7 @@ const accesstoken = process.env.FB_ACCESS_TOKEN
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 app.set('view engine', 'ejs');
-app.use(bodyParser.json();
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
 
