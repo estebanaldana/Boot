@@ -65,7 +65,7 @@ function receiveMessage(event){
 	console.log(event);
 	var senderID = event.sender.id;
 	var message = event.message;
-	var recipientId = event.rescipient.id;
+	var recipientId = event.recipient.id;
 
 	console.log(senderID);
 	console.log(recipientId);
