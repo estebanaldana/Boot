@@ -2,7 +2,6 @@
 
 const
 	bodyParser = require('body-parser'),
-	config = require('config'),
   	crypto = require('crypto'),
 	express = require('express'),
 	https = require('https'),  
@@ -61,9 +60,10 @@ app.post('/webhook', function(req, res){
 		});
 
 		res.sendStatus(200);
-
 	}
 });
+
+
 
 app.get('/authorize', function(req, res){
 	var accountLinkingToken = req.query.account_linking_token;
@@ -79,6 +79,7 @@ app.get('/authorize', function(req, res){
 		redirectURISuccess: redirectURISuccess
 	});
 });
+
 
 function receiveAuthentication(event){
 	var senderID = event.sender.id;
@@ -130,6 +131,9 @@ function receiveMessage(event){
 	
 	evaluateMessage(senderID, messageText);
 }
+
+
+
 
 function evaluateMessage(recipientId, message){
 
