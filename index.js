@@ -15,12 +15,6 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 
-app.listen(app.get('port'), function(){
-	console.log("el servidor se encuentra en el puerto", app.get('port'));
-});
-
-module.exports = app;
-
 app.get('/', function(req, res){
 	res.send('Bienvenido');
 });
@@ -81,6 +75,19 @@ app.get('/authorize', function(req, res){
 		redirectURISuccess: redirectURISuccess
 	});
 });
+
+function receiveAuthentication(event){
+	var senderID = event.sender.id;
+	var recipientID = event.recipient.id;
+	var timeOfAuth = event.timestamp;
+
+	var passThroughParam = event.option.ref;
+
+	console.log("received authentication for user %d and page %d with pass" + "through param '%s' at %d", senderID, recipientID, passThroughParam, timeOfAuth);
+
+	sendMessageText(senderID, "authentication successful");
+}
+
 
 function receiveMessage(event){
 	console.log(event);
@@ -354,3 +361,10 @@ function getStarWars( callback ){
 function isContain(sentence, word){
 	return sentence.indexOf(word) > -1;
 }
+
+
+app.listen(app.get('port'), function(){
+	console.log("el servidor se encuentra en el puerto", app.get('port'));
+});
+
+module.exports = app;
