@@ -1,9 +1,13 @@
 'use strict';
 
 const
-	express = require('express'),
 	bodyParser = require('body-parser'),
+	config = require('config'),
+  	crypto = require('crypto'),
+	express = require('express'),
+	https = require('https'),  
 	request = require('request');
+
 
 const mytoken = process.env.FB_VERIFY_TOKEN
 const accesstoken = process.env.FB_ACCESS_TOKEN
