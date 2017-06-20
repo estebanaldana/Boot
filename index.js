@@ -2,14 +2,11 @@
 
 const
 	bodyParser = require('body-parser'),
+	config = require('config'),
   	crypto = require('crypto'),
 	express = require('express'),
 	https = require('https'),  
 	request = require('request');
-
-
-const mytoken = process.env.FB_VERIFY_TOKEN
-const accesstoken = process.env.FB_ACCESS_TOKEN
 
 var app = express();
 app.set('port', (process.env.PORT || 5000));
@@ -17,6 +14,13 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
+const mytoken = process.env.FB_VERIFY_TOKEN
+const accesstoken = process.env.FB_ACCESS_TOKEN
+
+if(!(mytoken && accesstoken)){
+	console.log("missing congig values");
+	process.exit(1);
+}
 
 app.get('/', function(req, res){
 	res.send('Bienvenido');
