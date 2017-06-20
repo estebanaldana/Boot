@@ -85,7 +85,7 @@ function receiveAuthentication(event){
 
 	console.log("received authentication for user %d and page %d with pass" + "through param '%s' at %d", senderID, recipientID, passThroughParam, timeOfAuth);
 
-	sendMessageText(senderID, "authentication successful");
+	evaluateMessage(senderID, "authentication successful");
 }
 
 
@@ -93,16 +93,36 @@ function receiveMessage(event){
 	console.log(event);
 	var senderID = event.sender.id;
 	var message = event.message;
+	var timeOfMessage = event.timestamp;
 	var recipientId = event.recipient.id;
 
 	console.log("senderID: %d", senderID);
-	console.log("recipientId: %d", recipientId);
+	console.log("recipientId: %,d", recipientId);
+	console.log("timeOfMessage: %d", timeOfMessage);
 	console.log(JSON.stringify(message));
 
+	var isEcho = message.is_echo;
 	var messageId = message.mid;
+	var appId = message.app_id;
+	var metadata = message.metadata;
+
 
 	var messageText = message.text;
 	var messageAttachments = message.attachments;
+	var quickReply = message.quick_reply;
+
+	if(isEcho){
+		console.log("Received echo for message %s and app %d with metadata %s", 
+      messageId, appId, metadata);
+		return;
+	}else if(quickReply){
+		var quickReplyPayload = quickReply.payload;
+		console.log("Quick reply for message %s with payload %s",
+      messageId, quickReplyPayload);
+
+		evaluateMessage(senderID, "quick reply tapped");
+		return;
+	}
 	
 	evaluateMessage(senderID, messageText);
 }
