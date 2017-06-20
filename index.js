@@ -106,7 +106,7 @@ function receiveMessage(event){
 	var recipientId = event.recipient.id;
 
 	console.log("senderID: %d", senderID);
-	console.log("recipientId: %,d", recipientId);
+	console.log("recipientId: %d", recipientId);
 	console.log("timeOfMessage: %d", timeOfMessage);
 	console.log(JSON.stringify(message));
 
@@ -198,7 +198,7 @@ function evaluateMessage(recipientId, message){
 		finalMessage = 'solo repetir: ' + message;
 	}
 
-	sendMessageText(recipientId, finalMessage);
+	sendMessageText(recipientId, message);
 }
 
 function sendMessageText(recipientId, message) {
