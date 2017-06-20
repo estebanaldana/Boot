@@ -198,7 +198,7 @@ function evaluateMessage(recipientId, message){
 		finalMessage = 'solo repetir: ' + message;
 	}
 
-	sendMessageText(recipientId, message);
+	sendMessageText(recipientId, finalMessage);
 }
 
 function sendMessageText(recipientId, message) {
