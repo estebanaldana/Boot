@@ -165,9 +165,11 @@ function evaluateMessage(recipientId, message){
 	}
 
 	else if(isContain(message,'imagen')){
-		finalMessage='imagen de que?';
 		if(isContain(message, 'gato')){
 			sendMessageImage(recipientId);
+		}
+		else{
+			finalMessage='imagen de que?';
 		}
 	}
 
