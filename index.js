@@ -285,7 +285,7 @@ function callSendAPI(messageData){
 			var messageId = data.message_id;
 
 			if(messageId){
-				console.log('el mesaje %s y con el recipiente %s se a enviado', messageId, recipientID);
+				console.log('el mesaje %s y con el recipiente %s se a enviado', messageId, recipientId);
 			}else{
 				console.log('el mensaje API recipient %s', recipientId);
 			}
