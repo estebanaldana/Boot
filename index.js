@@ -151,8 +151,8 @@ function evaluateMessage(recipientId, message){
 
 	else if(isContain(message, 'hola') || isContain(message, 'Hola')){
 
-		if(isContain(message, 'janette')){
-			finalMessage = "Hola te kelo :)";
+		if(isContain(message, 'laura')){
+			finalMessage = "Hola te mando besos :)";
 		}
 
 		else if(isContain(message, 'mama')){
