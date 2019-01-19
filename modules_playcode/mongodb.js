@@ -1,6 +1,6 @@
 const
 	MessageTemplate = require('./templates.js'),
-	regularExpressions = require('./regularExpressions.js'),
+	regularExpressions = require('./regularexpressions.js'),
 	mongoClient = require('mongodb').MongoClient,
 	conecction = process.env.MONGODB,
 	dataBase = process.env.DB_BOT,

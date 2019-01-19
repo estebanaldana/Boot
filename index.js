@@ -7,7 +7,7 @@ const
 	accessToken = process.env.FB_ACCESS_TOKEN,
 	valueMessage = require('./modules_playcode/value_messages.js')
 
-app.set('port', (process.env.PORT || 5210));
+app.set('port', (process.env.PORT));
 app.use(bodyParser.json());
 
 if(!(token && accessToken)){
