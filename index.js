@@ -1,24 +1,17 @@
-'use strict';
+const 
+	bodyParser = require('body-parser'), 
+	express = require('express'), 
+	request = require('request'),
+	app = express(),
+	token = process.env.FB_VERIFY_TOKEN,
+	accessToken = process.env.FB_ACCESS_TOKEN,
+	valueMessage = require('./modules_playcode/value_messages.js')
 
-const
-	bodyParser = require('body-parser'),
-//	config = require('config'),
-//  crypto = require('crypto'),
-	express = require('express'),
-//	https = require('https'),  
-	request = require('request');
-
-var app = express();
-app.set('port', (process.env.PORT || 5000));
-//app.set('view engine', 'ejs');
+app.set('port', (process.env.PORT || 5210));
 app.use(bodyParser.json());
-//app.use(express.static('public'));
 
-const mytoken = process.env.FB_VERIFY_TOKEN
-const accesstoken = process.env.FB_ACCESS_TOKEN
-
-if(!(mytoken && accesstoken)){
-	console.log("missing congig values");
+if(!(token && accessToken)){
+	console.log("Configura los Valores 'FB_VERIFY_TOKEN', 'FB_ACCESS_TOKEN', 'PORT'");
 	process.exit(1);
 }
 
@@ -30,12 +23,12 @@ app.get('/', function(req, res){
 app.get('/webhook', function(req, res){
 	 
 	if(req.query['hub.mode'] === 'subscribe' &&	
-		req.query['hub.verify_token'] === mytoken){
+		req.query['hub.verify_token'] === token){
 
 		res.status(200).send(req.query['hub.challenge']);
 	}
 	else{
-		res.send('Tu no tinenes que estar aqui');
+		res.send('ERROR');
 	}
 });
 
@@ -68,23 +61,6 @@ app.post('/webhook', function(req, res){
 });
 
 
-
-app.get('/authorize', function(req, res){
-	var accountLinkingToken = req.query.account_linking_token;
-	var redirectURI = req.query.redirect_uri;
-
-	var authCode = "1234567890";
-
-	var redirectURISuccess = redirectURI + "&authorization_code=" + authCode;
-
-	res.render('authorize', {
-		accountLinkingToken: accountLinkingToken,
-		redirectURI: redirectURI,
-		redirectURISuccess: redirectURISuccess
-	});
-});
-
-
 function receiveAuthentication(event){
 	var senderID = event.sender.id;
 	var recipientID = event.recipient.id;
@@ -94,7 +70,7 @@ function receiveAuthentication(event){
 
 	console.log("received authentication for user %d and page %d with pass" + "through param '%s' at %d", senderID, recipientID, passThroughParam, timeOfAuth);
 
-	evaluateMessage(senderID, "authentication successful");
+	valueMessage.evaluateMessage(senderID, "authentication successful");
 }
 
 
@@ -129,225 +105,14 @@ function receiveMessage(event){
 		console.log("Quick reply for message %s with payload %s",
       messageId, quickReplyPayload);
 
-		evaluateMessage(senderID, "quick reply tapped");
+		valueMessage.evaluateMessage(senderID, "quick reply tapped");
 		return;
 	}
 	
-	evaluateMessage(senderID, messageText);
+	valueMessage.evaluateMessage(senderID, messageText);
 }
 
-
-
-
-function evaluateMessage(recipientId, message){
-
-	var finalMessage = '';
-
-
-	if(isContain(message, 'ayuda')){
-		finalMessage = 'por el momento no te puedo ayudar';
-	}
-
-
-	else if(isContain(message, 'hola') || isContain(message, 'Hola')){
-
-		if(isContain(message, 'laura')){
-			finalMessage = "Hola te mando besos :)";
-		}
-
-		else if(isContain(message, 'mama')){
-			finalMessage='que quieres ya vas a empesar a moler';
-		}
-
-		else{
-			finalMessage = "Hola Quien Eres";
-		}
-	}
-
-	else if(isContain(message,'imagen')){
-		if(isContain(message, 'gato')){
-			sendMessageImage(recipientId);
-		}
-		else{
-			finalMessage='imagen de que?';
-		}
-	}
-
-	else if(isContain(message, 'clima')){
-		getWeather(function(temperature){
-			message = getMessageWeather(temperature);
-			sendMessageText(recipientId, message);
-		});
-	}
-
-	else if(isContain(message, 'luke')){
-		if(isContain(message, 'star wars')){
-			getStarWars(function(name, estatura){
-			message = name +estatura;
-			sendMessageText(recipientId, message);
-			});
-		}
-		else{
-			finalMessage='de que luke hablas';
-		}
-	}
-
-	else if(isContain(message, 'info')){
-		 sendMessageTemplate(recipientId);
-	}
-
-	else{
-		finalMessage = 'solo repetir: ' + message;
-	}
-
-	sendMessageText(recipientId, finalMessage);
-}
-
-function sendMessageText(recipientId, message) {
-
-	var messageData = {
-
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			text: message
-		}
-
-	};
-	callSendAPI(messageData);
-}
-
-
-function sendMessageImage(recipientId){
-	var messageData = { 
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "image",
-				payload: {
-					url: "http://i.imgur.com/SOFXhd6.jpg"
-				}
-			}
-		}
-	};
-	callSendAPI(messageData);
-}
-
-//template
-function sendMessageTemplate(recipientId){
-	var messageData = {
-		recipient:{
-			id : recipientId
-		},
-		message:{
-			attachment:{
-				type: "template",
-				payload:{
-					template_type: "generic",
-					elements: [ elemenTemplate() ]
-				}
-			}
-		}
-	};
-	callSendAPI(messageData);
-}
-
-
-function elemenTemplate(){
-	return{
-		title :"Esteban",
-		subtitle: "prueba",
-		item_url: "https://www.facebook.com/PlayCodeCompany",
-		image_url: "http://vignette2.wikia.nocookie.net/especiesaliens/images/6/6b/006.jpg/revision/latest?cb=20111220014746&path-prefix=es",
-		buttons: [ buttonTemplate() ],
-	}
-}
-
-function buttonTemplate(){
-	return{
-		type: "web_url",
-		url: "https://www.youtube.com/channel/UCsVYL93M_Higkf4gRw0kALw",
-		title:"EA",
-	}
-}
-
-
-function callSendAPI(messageData){
-	request({
-		uri: 'https://graph.facebook.com/v2.6/me/messages',
-		qs : { access_token : accesstoken },
-		method: 'POST',
-		json: messageData
-	},function(error, response, data){
-		if(!error && response.statusCode == 200){
-			var recipientId = data.recipient_id;
-			var messageId = data.message_id;
-
-			if(messageId){
-				console.log('el mesaje %s y con el recipiente %s se a enviado', messageId, recipientId);
-			}else{
-				console.log('el mensaje API recipient %s', recipientId);
-			}
-		}
-		else{
-			console.log('error');
-			console.error(messageId);
-			console.error(recipientId);
-		}
-	});
-}
-
-//mensaje de la temperatura 
-function getMessageWeather(temperature){
-	if(temperature > 30){
-		return "hay demaciado calor la temperatura es de " +temperature +"º";
-	}
-	return "la temperatura es de" +temperature +"º es un buen dia";
-}
-
-//api clima
-function getWeather( callback ){
-	request('http://api.geonames.org/findNearByWeatherJSON?formatted=true&lat=42&lng=-2&username=demo&style=full',
-	function(error, response, data){
-		if(!error){
-			var response = JSON.parse(data);
-			var temperature = response.weatherObservation.temperature;
-			callback(temperature);
-		}
-	});
-
-}
-
-function getStarWars( callback ){
-	request('http://swapi.co/api/people/1/',
-	function(error, response, data){
-		if(!error){
-			var response = JSON.parse(data);
-			var personaje = response.name;
-			callback(personaje);
-		}
-		if(!error){
-			var response = JSON.parse(data);
-			var estatura = response.height;
-			callback(estatura);
-		}
-		if(!error){
-			var response= JSON.parse(data);
-			var sexo = response.gender;
-			callback(sexo);
-		}
-	});
-}
-
-
-function isContain(sentence, word){
-	return sentence.indexOf(word) > -1;
-}
-
-
+/*Listener*/
 app.listen(app.get('port'), function(){
 	console.log("el servidor se encuentra en el puerto", app.get('port'));
 });

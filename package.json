@@ -1,7 +1,7 @@
 {
-  "name": "primer_boot",
-  "version": "1.0.0",
-  "description": "boot :)",
+  "name": "Bot_playcode",
+  "version": "2.2.1",
+  "description": "bot",
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.17.1",
@@ -9,7 +9,7 @@
     "request": "^2.81.0"
   },
   "engines": {
-    "node": "6.10.2"
+    "node": "6.16.0"
   },
   "devDependencies": {},
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "keywords": [],
   "author": "estebanaldana",
-  "license": "ISC",
+  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/estebanaldana/Boot/issues"
   },
