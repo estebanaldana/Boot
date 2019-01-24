@@ -5,10 +5,14 @@ const
 	app = express(),
 	token = process.env.FB_VERIFY_TOKEN,
 	accessToken = process.env.FB_ACCESS_TOKEN,
-	valueMessage = require('./modules_playcode/value_messages.js')
+	valueMessage = require('./modules_playcode/value_messages.js'),
+	fs = require('fs');
 
 app.set('port', (process.env.PORT));
+
 app.use(bodyParser.json());
+
+app.use(express.static(__dirname + '/status'));
 
 if(!(token && accessToken)){
 	console.log("Configura los Valores 'FB_VERIFY_TOKEN', 'FB_ACCESS_TOKEN', 'PORT'");
@@ -30,6 +34,23 @@ app.get('/webhook', function(req, res){
 	else{
 		res.send('ERROR');
 	}
+});
+
+app.get('/politicadeprivacidad', function(req, res) {
+	fs.readFile('templates/pdp.html', function(err, data) {
+    	res.writeHead(200, {'Content-Type': 'text/html'});
+    	res.write(data);
+    	res.end();
+  	});
+});
+
+
+app.get('/terminosycondiciones', function(req, res) {
+	fs.readFile('templates/tyc.html', function(err, data) {
+		res.writeHead(200, {'Content-Type': 'text/html'});
+		res.write(data);
+		res.end();
+	});
 });
 
 
